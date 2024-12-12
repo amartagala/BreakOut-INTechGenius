@@ -2,7 +2,7 @@
 
  Breakout is an arcade game in which the player controls a paddle on the screen knocking the ball back and forth breaking the bricks.
  
- ![thumbnail](./Breakout.png)
+ ![thumbnail](./Breakout.PNG)
 
 ## BREAKOUT GAME PREVIEW
 https://github.com/abhikumar45444/BREAKOUT/assets/76621656/78692e5c-fbf9-4350-b097-93bd0d8232b9
@@ -13,7 +13,7 @@ https://github.com/abhikumar45444/BREAKOUT/assets/76621656/78692e5c-fbf9-4350-b0
  The bricks are in color of yellow, green, orange, and red from bottom to top.
 
 ## PLAY GAME ON WEB
-Checkout Game Here: [BREAKOUT](https://abhikumar45444.github.io/BREAKOUT/).
+Checkout Game Here: [BREAKOUT](https://amartagala.github.io/BreakOut-INTechGenius/).
 
 ## PLAY (WINDOWS - EXE)
  Run the [breakout.exe](./build) file.
