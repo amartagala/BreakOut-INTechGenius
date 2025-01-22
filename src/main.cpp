@@ -356,7 +356,7 @@ void GameState()
 
     if(gameStartedFirstTime)
     {
-        if((IsKeyPressed(KEY_SPACE) || touchStartGameInput == GESTURE_SWIPE_UP) && !gameStartScreenAnimation && !gameStartScreenAnimationText)
+        if((IsKeyPressed(KEY_SPACE) || touchStartGameInput == GESTURE_SWIPE_UP || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)) && !gameStartScreenAnimation && !gameStartScreenAnimationText)
         {
             PlayMusicStream(gameMusic);
             isGameStarted = !isGameStarted;
@@ -365,13 +365,13 @@ void GameState()
     }
     else
     {
-        if((IsKeyPressed(KEY_SPACE) || touchStartGameInput == GESTURE_SWIPE_UP || touchStartGameInput == GESTURE_SWIPE_DOWN) && !isAnimationCancelled)
+        if((IsKeyPressed(KEY_SPACE) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT) || touchStartGameInput == GESTURE_SWIPE_UP || touchStartGameInput == GESTURE_SWIPE_DOWN) && !isAnimationCancelled)
         {
             PlayMusicStream(gameMusic);
             isGameStarted = !isGameStarted;
             isAnimationCancelled = true;
         }
-        else if(IsKeyPressed(KEY_SPACE) || touchStartGameInput == GESTURE_SWIPE_DOWN)
+        else if(IsKeyPressed(KEY_SPACE) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT) || touchStartGameInput == GESTURE_SWIPE_DOWN)
         {
            PlayMusicStream(gameMusic);
             isGameStarted = !isGameStarted;
@@ -427,7 +427,7 @@ void userInput()
     static float paddleDecelerationFactor = 0.5f;
     static float paddleUTurnDecelerationFactor = 10.0f;
 
-    if (IsKeyDown(KEY_LEFT) || (ArrowGesture(LEFT_ARROW, leftGesture, rightGesture)))
+    if (IsKeyDown(KEY_LEFT) || (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) < 0) || (ArrowGesture(LEFT_ARROW, leftGesture, rightGesture)))
     {
         paddleSpeedX -= paddleAcceleration * GetFrameTime() * paddleAccelerationFactor;
         isPaddleDirLeft = true;
@@ -438,7 +438,7 @@ void userInput()
         isPaddleDirLeft = false;
     }
 
-    if (IsKeyDown(KEY_RIGHT) || (ArrowGesture(RIGHT_ARROW, leftGesture, rightGesture)))
+    if (IsKeyDown(KEY_RIGHT) || (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) > 0) || (ArrowGesture(RIGHT_ARROW, leftGesture, rightGesture)))
     {
         paddleSpeedX += paddleAcceleration * GetFrameTime() * paddleAccelerationFactor;
         isPaddleDirLeft = false;
@@ -449,7 +449,7 @@ void userInput()
         isPaddleDirRight = false;
     }
 
-    if(((!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) || (IsKeyDown(KEY_LEFT) && IsKeyDown(KEY_RIGHT))) && (!leftGesture && !rightGesture))
+    if(((!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) || (!GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X)) || (IsKeyDown(KEY_LEFT) && IsKeyDown(KEY_RIGHT))) && (!leftGesture && !rightGesture))
     {
         // If neither key is pressed, gradually decrease speed to 0
         if (paddleSpeedX > 0)
@@ -463,7 +463,7 @@ void userInput()
             if (paddleSpeedX > 0) paddleSpeedX = 0;
         }
     }
-    if(IsKeyReleased(KEY_LEFT) && IsKeyDown(KEY_RIGHT))
+    if(IsKeyReleased(KEY_LEFT) && IsKeyDown(KEY_RIGHT) /* || (!(GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) <= 0) && (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) > 0)) */)
         {
             if (paddleSpeedX < 0)
                 paddleSpeedX += paddleDeceleration * GetFrameTime() * paddleUTurnDecelerationFactor;
@@ -471,7 +471,7 @@ void userInput()
                 paddleSpeedX += paddleAcceleration * GetFrameTime() * paddleAccelerationFactor;
         }
         
-    if(IsKeyReleased(KEY_RIGHT) && IsKeyDown(KEY_LEFT))
+    if(IsKeyReleased(KEY_RIGHT) && IsKeyDown(KEY_LEFT) /* || ((GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) < 0) && !(GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) >= 0)) */)
     {
         if (paddleSpeedX > 0)
             paddleSpeedX -= paddleDeceleration * GetFrameTime() * paddleUTurnDecelerationFactor;
@@ -1883,7 +1883,7 @@ void UpdateDrawFrame(void)
             {
                 GameOverScreen();
                 int touchStartGameInput = TouchStartGameInput();
-                if (IsKeyPressed(KEY_ENTER) || touchStartGameInput == GESTURE_SWIPE_UP)
+                if (IsKeyPressed(KEY_ENTER) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT) || touchStartGameInput == GESTURE_SWIPE_UP)
                 {
                     currentParticlesTime = 0.0f;                    
                     currentTimeGO = 0.0f;
@@ -1937,7 +1937,7 @@ void UpdateDrawFrame(void)
                     StopSound(victorySound);
                 GameWonScreen();
                 int touchStartGameInput = TouchStartGameInput();
-                if (IsKeyPressed(KEY_ENTER) || touchStartGameInput == GESTURE_SWIPE_UP)
+                if (IsKeyPressed(KEY_ENTER) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT) || touchStartGameInput == GESTURE_SWIPE_UP)
                 {
                     currentParticlesTime = 0.0f;                    
                     currentTimeGW = 0.0f;
